@@ -4,7 +4,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
 
 public class Camera {
-	private Vector3f position = new Vector3f(0,0,2);
+	private Vector3f position = new Vector3f(0,0,0);
 	private float pitch;//how high or low the camera is aimed
 	private float yaw;//how much left or right camera is aiming
 	private float roll;//how much camera is tilted to one side
