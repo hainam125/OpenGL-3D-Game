@@ -12,8 +12,9 @@ import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
 import renderEngine.OBJLoader;
-import renderEngine.Renderer;
+import renderEngine.EntityRenderer;
 import shaders.StaticShader;
+import terrains.Terrain;
 import textures.ModelTexture;
 
 public class MainGameLoop {
@@ -28,14 +29,18 @@ public class MainGameLoop {
 		TextureModel textureModel = new TextureModel(model, texture);
 		
 		Entity entity = new Entity(textureModel, new Vector3f(0,-4,-25),0,0,0,1);
-		Light light = new Light(new Vector3f(0,0, -13), new Vector3f(1,1,1));
+		Light light = new Light(new Vector3f(0,15, -15), new Vector3f(1,1,1));
 		Camera camera = new Camera();
+		Terrain terrain = new Terrain(0,0,loader, new ModelTexture(loader.loadTexture("grass")));
+		Terrain terrain1 = new Terrain(1,0,loader, new ModelTexture(loader.loadTexture("grass")));
 		
 		MasterRenderer renderer = new MasterRenderer();
 		
 		while(!Display.isCloseRequested()) {
 			entity.increaseRotation(0, 1, 0);
 			camera.move();
+			renderer.processTerrain(terrain);
+			renderer.processTerrain(terrain1);
 			renderer.processEntity(entity);
 			renderer.render(light, camera);
 			DisplayManager.updateDisplay();
