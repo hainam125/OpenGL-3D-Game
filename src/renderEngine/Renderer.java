@@ -11,6 +11,7 @@ import entities.Entity;
 import models.RawModel;
 import models.TextureModel;
 import shaders.StaticShader;
+import textures.ModelTexture;
 import toolbox.Maths;
 
 public class Renderer {
@@ -21,6 +22,8 @@ public class Renderer {
 	private Matrix4f projectionMatrix;
 	
 	public Renderer(StaticShader shader) {
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glCullFace(GL11.GL_BACK);
 		createProjectionMatrix();
 		shader.start();
 		shader.loadProjectionMatrix(projectionMatrix);
@@ -39,14 +42,18 @@ public class Renderer {
 		GL30.glBindVertexArray(model.getVaoID());
 		GL20.glEnableVertexAttribArray(0);
 		GL20.glEnableVertexAttribArray(1);
+		GL20.glEnableVertexAttribArray(2);
 		Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(),
 				entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());
 		shader.loadTransformationMatrix(transformationMatrix);
+		ModelTexture texture = textureModel.getTexture();
+		shader.loadShineVariables(texture.getShineDamper(), texture.getReflectivity());
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureModel.getTexture().getID());
 		GL11.glDrawElements(GL11.GL_TRIANGLES, model.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
 		GL20.glDisableVertexAttribArray(0);
 		GL20.glDisableVertexAttribArray(1);
+		GL20.glDisableVertexAttribArray(2);
 		GL30.glBindVertexArray(0);
 	}
 	
