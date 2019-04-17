@@ -12,6 +12,8 @@ import entities.Entity;
 import entities.Light;
 import models.RawModel;
 import models.TextureModel;
+import objectConverter.ModelData;
+import objectConverter.OBJFileLoader;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
@@ -26,8 +28,9 @@ public class MainGameLoop {
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
 		
-		RawModel model = OBJLoader.loadObjModel("tree", loader);
-		TextureModel staticModel = new TextureModel(model, new ModelTexture(loader.loadTexture("tree")));
+		ModelData data = OBJFileLoader.loadOBJ("tree");
+		RawModel treeModel = loader.loadToVAO(data.getVertices(), data.getTextureCoords(), data.getNormals(), data.getIndices());
+		TextureModel staticModel = new TextureModel(treeModel, new ModelTexture(loader.loadTexture("tree")));
 		
 		TextureModel grass = new TextureModel(OBJLoader.loadObjModel("grassModel", loader),
 				new ModelTexture(loader.loadTexture("grassTexture")));
