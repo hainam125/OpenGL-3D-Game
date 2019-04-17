@@ -38,6 +38,8 @@ public class MainGameLoop {
 		
 		TerrainTexturePack texturePack = new TerrainTexturePack(bgTexture, rTexture, gTexture, bTexture);
 		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
+
+		Terrain terrain = new Terrain(0,0,loader, texturePack, blendMap, "heightmap");
 		
 		ModelData data = OBJFileLoader.loadOBJ("tree");
 		RawModel treeModel = loader.loadToVAO(data.getVertices(), data.getTextureCoords(), data.getNormals(), data.getIndices());
@@ -54,10 +56,23 @@ public class MainGameLoop {
 		
 		List<Entity> entities = new ArrayList<>();
 		Random random = new Random();
-		for(int i = 0; i < 500; i++) {
-			entities.add(new Entity(staticModel, new Vector3f(random.nextFloat() * 600, 0, random.nextFloat() * 600), 0, 0, 0, 3));
-			entities.add(new Entity(grass, new Vector3f(random.nextFloat() * 600, 0, random.nextFloat() * 600), 0, 0, 0, 1));
-			entities.add(new Entity(fern, new Vector3f(random.nextFloat() * 600, 0, random.nextFloat() * 600), 0, 0, 0, 0.6f));
+		for(int i = 0; i < 400; i++) {
+			if(i%10==0) {
+				float x = random.nextFloat() * 600;
+				float z = random.nextFloat() * 600;
+				float y = terrain.getHeightOfTerrain(x, z);
+				entities.add(new Entity(staticModel, new Vector3f(x, y, z), 0, 0, 0, 4));
+			}
+			if(i%3==0) {
+				float x = random.nextFloat() * 600;
+				float z = random.nextFloat() * 600;
+				float y = terrain.getHeightOfTerrain(x, z);
+				entities.add(new Entity(grass, new Vector3f(x, y, z), 0, 0, 0, 1));
+				x = random.nextFloat() * 600;
+				z = random.nextFloat() * 600;
+				y = terrain.getHeightOfTerrain(x, z);
+				entities.add(new Entity(fern, new Vector3f(x, y, z), 0, 0, 0, 0.6f));
+			}
 		}
 
 		RawModel playerModel = OBJLoader.loadObjModel("person", loader);
@@ -66,12 +81,11 @@ public class MainGameLoop {
 		
 		Light light = new Light(new Vector3f(0,500, -15), new Vector3f(1,1,1));
 		Camera camera = new Camera(player);
-		Terrain terrain = new Terrain(0,0,loader, texturePack, blendMap, "heightmap");
 		
 		MasterRenderer renderer = new MasterRenderer();
 		while(!Display.isCloseRequested()) {
+			player.move(terrain);
 			camera.move();
-			player.move();
 			
 			renderer.processEntity(player);
 			renderer.processTerrain(terrain);
