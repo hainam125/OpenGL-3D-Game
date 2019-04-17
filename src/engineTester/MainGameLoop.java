@@ -60,17 +60,15 @@ public class MainGameLoop {
 			entities.add(new Entity(fern, new Vector3f(random.nextFloat() * 600, 0, random.nextFloat() * 600), 0, 0, 0, 0.6f));
 		}
 
-		
-		Light light = new Light(new Vector3f(0,500, -15), new Vector3f(1,1,1));
-		Camera camera = new Camera();
-		Terrain terrain = new Terrain(0,0,loader, texturePack, blendMap);
-		
-		MasterRenderer renderer = new MasterRenderer();
-		
 		RawModel playerModel = OBJLoader.loadObjModel("person", loader);
 		TextureModel playerTextureModel = new TextureModel(playerModel, new ModelTexture(loader.loadTexture("playerTexture")));
 		Player player = new Player(playerTextureModel, new Vector3f(200, 0 , 180), 0, 0, 0, 0.5f);
 		
+		Light light = new Light(new Vector3f(0,500, -15), new Vector3f(1,1,1));
+		Camera camera = new Camera(player);
+		Terrain terrain = new Terrain(0,0,loader, texturePack, blendMap);
+		
+		MasterRenderer renderer = new MasterRenderer();
 		while(!Display.isCloseRequested()) {
 			camera.move();
 			player.move();
