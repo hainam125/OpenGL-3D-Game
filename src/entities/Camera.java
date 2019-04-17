@@ -15,24 +15,7 @@ public class Camera {
 	}
 	
 	public void move() {
-		if(Keyboard.isKeyDown(Keyboard.KEY_W)) {
-			position.z -= MOVE_DISTANCE;
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_S)) {
-			position.z += MOVE_DISTANCE;
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			position.x += MOVE_DISTANCE;
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_A)) {
-			position.x -= MOVE_DISTANCE;
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_Q)) {
-			position.y -= MOVE_DISTANCE;
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_E)) {
-			position.y += MOVE_DISTANCE;
-		}
+		
 	}
 
 	public Vector3f getPosition() {

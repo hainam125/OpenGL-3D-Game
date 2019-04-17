@@ -10,6 +10,7 @@ import org.lwjgl.util.vector.Vector3f;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
+import entities.Player;
 import models.RawModel;
 import models.TextureModel;
 import objectConverter.ModelData;
@@ -66,8 +67,15 @@ public class MainGameLoop {
 		
 		MasterRenderer renderer = new MasterRenderer();
 		
+		RawModel playerModel = OBJLoader.loadObjModel("person", loader);
+		TextureModel playerTextureModel = new TextureModel(playerModel, new ModelTexture(loader.loadTexture("playerTexture")));
+		Player player = new Player(playerTextureModel, new Vector3f(200, 0 , 180), 0, 0, 0, 0.5f);
+		
 		while(!Display.isCloseRequested()) {
 			camera.move();
+			player.move();
+			
+			renderer.processEntity(player);
 			renderer.processTerrain(terrain);
 			for(Entity entity : entities) {
 				renderer.processEntity(entity);
