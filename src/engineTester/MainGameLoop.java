@@ -50,8 +50,9 @@ public class MainGameLoop {
 		grass.getTexture().setHasTransparency(true);
 		grass.getTexture().setUseFakeLighting(true);
 		
-		TextureModel fern = new TextureModel(OBJLoader.loadObjModel("fern", loader),
-				new ModelTexture(loader.loadTexture("fern")));
+		ModelTexture fernTextureAtlas = new ModelTexture(loader.loadTexture("fern"));
+		fernTextureAtlas.setNumerOfRows(2);
+		TextureModel fern = new TextureModel(OBJLoader.loadObjModel("fern", loader), fernTextureAtlas);
 		fern.getTexture().setHasTransparency(true);
 		
 		List<Entity> entities = new ArrayList<>();
@@ -71,7 +72,7 @@ public class MainGameLoop {
 				x = random.nextFloat() * 600;
 				z = random.nextFloat() * 600;
 				y = terrain.getHeightOfTerrain(x, z);
-				entities.add(new Entity(fern, new Vector3f(x, y, z), 0, 0, 0, 0.6f));
+				entities.add(new Entity(fern, random.nextInt(4), new Vector3f(x, y, z), 0, 0, 0, 0.6f));
 			}
 		}
 

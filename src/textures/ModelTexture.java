@@ -7,6 +7,8 @@ public class ModelTexture {
 	private boolean hasTransparency = false;
 	private boolean useFakeLighting = false;
 	
+	private int numerOfRows = 1;
+	
 	public ModelTexture(int id) {
 		textureID = id;
 	}
@@ -45,5 +47,13 @@ public class ModelTexture {
 
 	public void setUseFakeLighting(boolean useFakeLighting) {
 		this.useFakeLighting = useFakeLighting;
+	}
+
+	public int getNumerOfRows() {
+		return numerOfRows;
+	}
+
+	public void setNumerOfRows(int numerOfRows) {
+		this.numerOfRows = numerOfRows;
 	}
 }
