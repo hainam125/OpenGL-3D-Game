@@ -22,11 +22,21 @@ import renderEngine.EntityRenderer;
 import shaders.StaticShader;
 import terrains.Terrain;
 import textures.ModelTexture;
+import textures.TerrainTexture;
+import textures.TerrainTexturePack;
 
 public class MainGameLoop {
 	public static void main(String[] args) {
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
+		
+		TerrainTexture bgTexture = new TerrainTexture(loader.loadTexture("grassy2"));
+		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("mud"));
+		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("grassFlowers"));
+		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("path"));
+		
+		TerrainTexturePack texturePack = new TerrainTexturePack(bgTexture, rTexture, gTexture, bTexture);
+		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
 		
 		ModelData data = OBJFileLoader.loadOBJ("tree");
 		RawModel treeModel = loader.loadToVAO(data.getVertices(), data.getTextureCoords(), data.getNormals(), data.getIndices());
@@ -52,7 +62,7 @@ public class MainGameLoop {
 		
 		Light light = new Light(new Vector3f(0,500, -15), new Vector3f(1,1,1));
 		Camera camera = new Camera();
-		Terrain terrain = new Terrain(0,0,loader, new ModelTexture(loader.loadTexture("grass")));
+		Terrain terrain = new Terrain(0,0,loader, texturePack, blendMap);
 		
 		MasterRenderer renderer = new MasterRenderer();
 		
