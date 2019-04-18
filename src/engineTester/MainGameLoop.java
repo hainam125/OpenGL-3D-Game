@@ -58,6 +58,9 @@ public class MainGameLoop {
 		TextureModel fern = new TextureModel(OBJLoader.loadObjModel("fern", loader), fernTextureAtlas);
 		fern.getTexture().setHasTransparency(true);
 		
+		TextureModel lamp = new TextureModel(OBJLoader.loadObjModel("lamp", loader),
+				new ModelTexture(loader.loadTexture("lamp")));
+		
 		List<Entity> entities = new ArrayList<>();
 		Random random = new Random();
 		for(int i = 0; i < 400; i++) {
@@ -84,10 +87,19 @@ public class MainGameLoop {
 		Player player = new Player(playerTextureModel, new Vector3f(200, 0 , 180), 0, 0, 0, 0.5f);
 		
 		List<Light> lights = new ArrayList<>();
-		Light light = new Light(new Vector3f(0,1000, -700), new Vector3f(1,1,1));
-		lights.add(light);
+		/*
+		lights.add(new Light(new Vector3f(0,1000, -700), new Vector3f(1,1,1)));
 		lights.add(new Light(new Vector3f(-200,100, -200), new Vector3f(10,0,0)));
 		lights.add(new Light(new Vector3f(200,100, 200), new Vector3f(0,0,10)));
+		*/
+		lights.add(new Light(new Vector3f(0,1000, -700), new Vector3f(0.4f,0.4f,0.4f)));
+		lights.add(new Light(new Vector3f(220,22, 180), new Vector3f(4,0,0), new Vector3f(1,0.01f,0.002f)));
+		lights.add(new Light(new Vector3f(160,13, 205), new Vector3f(0,2,2), new Vector3f(1,0.01f,0.002f)));
+		lights.add(new Light(new Vector3f(195,23, 170), new Vector3f(2,2,0), new Vector3f(1,0.01f,0.002f)));
+		
+		entities.add(new Entity(lamp, new Vector3f(220, 10, 180), 0, 0, 0, 1));
+		entities.add(new Entity(lamp, new Vector3f(160, 3, 205), 0, 0, 0, 1));
+		entities.add(new Entity(lamp, new Vector3f(195, 10, 170), 0, 0, 0, 1));
 		
 		Camera camera = new Camera(player);
 		
