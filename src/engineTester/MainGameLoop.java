@@ -83,7 +83,12 @@ public class MainGameLoop {
 		TextureModel playerTextureModel = new TextureModel(playerModel, new ModelTexture(loader.loadTexture("playerTexture")));
 		Player player = new Player(playerTextureModel, new Vector3f(200, 0 , 180), 0, 0, 0, 0.5f);
 		
-		Light light = new Light(new Vector3f(0,500, -15), new Vector3f(1,1,1));
+		List<Light> lights = new ArrayList<>();
+		Light light = new Light(new Vector3f(0,1000, -700), new Vector3f(1,1,1));
+		lights.add(light);
+		lights.add(new Light(new Vector3f(-200,100, -200), new Vector3f(10,0,0)));
+		lights.add(new Light(new Vector3f(200,100, 200), new Vector3f(0,0,10)));
+		
 		Camera camera = new Camera(player);
 		
 		MasterRenderer renderer = new MasterRenderer();
@@ -105,7 +110,7 @@ public class MainGameLoop {
 			for(Entity entity : entities) {
 				renderer.processEntity(entity);
 			}
-			renderer.render(light, camera);
+			renderer.render(lights, camera);
 			guiRenderer.render(guis);
 			DisplayManager.updateDisplay();
 		}
