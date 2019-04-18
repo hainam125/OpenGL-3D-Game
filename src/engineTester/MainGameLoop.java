@@ -103,7 +103,7 @@ public class MainGameLoop {
 		
 		Camera camera = new Camera(player);
 		
-		MasterRenderer renderer = new MasterRenderer();
+		MasterRenderer renderer = new MasterRenderer(loader);
 
 		List<GuiTexture> guis = new ArrayList<>();
 		GuiTexture gui = new GuiTexture(loader.loadTexture("socuwan"), new Vector2f(0.5f, 0.5f), new Vector2f(0.25f, 0.25f));
