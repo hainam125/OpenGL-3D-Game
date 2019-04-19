@@ -158,7 +158,7 @@ public class MainGameLoop {
 			fbos.unbindCurrentFrameBuffer();
 			renderer.RenderScene(entities, terrain, lights, camera, new Vector4f(0,1,0,10000));
 			
-			waterRenderer.render(waters, camera);
+			waterRenderer.render(waters, camera, lights.get(0));
 			guiRenderer.render(guis);
 			
 			DisplayManager.updateDisplay();
