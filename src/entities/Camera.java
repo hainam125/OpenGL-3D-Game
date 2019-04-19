@@ -50,6 +50,10 @@ public class Camera {
 		return position;
 	}
 
+	public void invertPitch() {
+		this.pitch = -pitch;
+	}
+
 	public float getPitch() {
 		return pitch;
 	}
