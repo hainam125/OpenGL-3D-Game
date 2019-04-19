@@ -29,6 +29,9 @@ import textures.ModelTexture;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
 import toolbox.MousePicker;
+import water.WaterRenderer;
+import water.WaterShader;
+import water.WaterTile;
 
 public class MainGameLoop {
 	public static void main(String[] args) {
@@ -85,15 +88,14 @@ public class MainGameLoop {
 
 		RawModel playerModel = OBJLoader.loadObjModel("person", loader);
 		TextureModel playerTextureModel = new TextureModel(playerModel, new ModelTexture(loader.loadTexture("playerTexture")));
-		Player player = new Player(playerTextureModel, new Vector3f(200, 0 , 180), 0, 0, 0, 0.5f);
+		Player player = new Player(playerTextureModel, new Vector3f(75, 0 , 130), 0, 0, 0, 0.5f);
 		
 		List<Light> lights = new ArrayList<>();
-		/*
 		lights.add(new Light(new Vector3f(0,1000, -700), new Vector3f(1,1,1)));
+		/*
 		lights.add(new Light(new Vector3f(-200,100, -200), new Vector3f(10,0,0)));
 		lights.add(new Light(new Vector3f(200,100, 200), new Vector3f(0,0,10)));
 		*/
-		lights.add(new Light(new Vector3f(0,1000, -700), new Vector3f(0.4f,0.4f,0.4f)));
 		Light light = new Light(new Vector3f(220,22, 180), new Vector3f(4,0,0), new Vector3f(1,0.01f,0.002f));
 		lights.add(light);
 		//lights.add(new Light(new Vector3f(160,13, 205), new Vector3f(0,2,2), new Vector3f(1,0.01f,0.002f)));
@@ -109,34 +111,39 @@ public class MainGameLoop {
 		MasterRenderer renderer = new MasterRenderer(loader);
 
 		List<GuiTexture> guis = new ArrayList<>();
-		GuiTexture gui = new GuiTexture(loader.loadTexture("socuwan"), new Vector2f(0.5f, 0.5f), new Vector2f(0.25f, 0.25f));
-		guis.add(gui);
-		GuiTexture gui1 = new GuiTexture(loader.loadTexture("thinmatrix"), new Vector2f(0.3f, 0.74f), new Vector2f(0.4f, 0.4f));
-		guis.add(gui1);
+		//guis.add(new GuiTexture(loader.loadTexture("socuwan"), new Vector2f(0.5f, 0.5f), new Vector2f(0.25f, 0.25f)));
+		//guis.add(new GuiTexture(loader.loadTexture("thinmatrix"), new Vector2f(0.3f, 0.74f), new Vector2f(0.4f, 0.4f)));
 		
 		GuiRenderer guiRenderer = new GuiRenderer(loader);
 		
 		MousePicker picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain);
+		
+		WaterShader waterShader = new WaterShader();
+		WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix());
+		List<WaterTile> waters = new ArrayList<>();
+		waters.add(new WaterTile(115, 120, -3));
 		
 		while(!Display.isCloseRequested()) {
 			player.move(terrain);
 			camera.move();
 			picker.update();
 			//System.out.println(picker.getCurrentRay());
-			Vector3f terrainPoint = picker.getCurrentTerrainPoint();
-			if(terrainPoint != null) {
+			//Vector3f terrainPoint = picker.getCurrentTerrainPoint();
+			/*if(terrainPoint != null) {
 				lampEntity.setPosition(terrainPoint);
 				light.setPosition(new Vector3f(terrainPoint.x, terrainPoint.y + 15, terrainPoint.z));
-			}
+			}*/
 			renderer.processEntity(player);
 			renderer.processTerrain(terrain);
 			for(Entity entity : entities) {
 				renderer.processEntity(entity);
 			}
 			renderer.render(lights, camera);
+			waterRenderer.render(waters, camera);
 			guiRenderer.render(guis);
 			DisplayManager.updateDisplay();
 		}
+		waterShader.cleanUp();
 		guiRenderer.cleanUp();
 		renderer.cleanUp();
 		loader.cleanUp();
