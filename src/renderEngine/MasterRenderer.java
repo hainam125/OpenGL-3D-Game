@@ -95,6 +95,14 @@ public class MasterRenderer {
 		}
 	}
 	
+	public void RenderScene(List<Entity> entities, Terrain terrain, List<Light> lights, Camera camera) {
+		processTerrain(terrain);
+		for(Entity entity : entities) {
+			processEntity(entity);
+		}
+		render(lights, camera);
+	}
+	
 	private void createProjectionMatrix() {
 		float aspectRatio = (float)Display.getWidth() / (float)Display.getHeight();
 		float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV) / 2f)) * aspectRatio);

@@ -29,6 +29,7 @@ import textures.ModelTexture;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
 import toolbox.MousePicker;
+import water.WaterFrameBuffers;
 import water.WaterRenderer;
 import water.WaterShader;
 import water.WaterTile;
@@ -89,6 +90,7 @@ public class MainGameLoop {
 		RawModel playerModel = OBJLoader.loadObjModel("person", loader);
 		TextureModel playerTextureModel = new TextureModel(playerModel, new ModelTexture(loader.loadTexture("playerTexture")));
 		Player player = new Player(playerTextureModel, new Vector3f(75, 0 , 130), 0, 0, 0, 0.5f);
+		entities.add(player);
 		
 		List<Light> lights = new ArrayList<>();
 		lights.add(new Light(new Vector3f(0,1000, -700), new Vector3f(1,1,1)));
@@ -123,6 +125,9 @@ public class MainGameLoop {
 		List<WaterTile> waters = new ArrayList<>();
 		waters.add(new WaterTile(115, 120, -3));
 		
+		WaterFrameBuffers fbos = new WaterFrameBuffers();
+		guis.add(new GuiTexture(fbos.getReflectionTexture(), new Vector2f(-0.5f, 0.5f), new Vector2f(0.5f, 0.5f)));
+		
 		while(!Display.isCloseRequested()) {
 			player.move(terrain);
 			camera.move();
@@ -133,16 +138,18 @@ public class MainGameLoop {
 				lampEntity.setPosition(terrainPoint);
 				light.setPosition(new Vector3f(terrainPoint.x, terrainPoint.y + 15, terrainPoint.z));
 			}*/
-			renderer.processEntity(player);
-			renderer.processTerrain(terrain);
-			for(Entity entity : entities) {
-				renderer.processEntity(entity);
-			}
-			renderer.render(lights, camera);
+			fbos.bindReflectionFrameBuffer();
+			renderer.RenderScene(entities, terrain, lights, camera);
+			fbos.unbindCurrentFrameBuffer();
+			
+			renderer.RenderScene(entities, terrain, lights, camera);
+			
 			waterRenderer.render(waters, camera);
 			guiRenderer.render(guis);
+			
 			DisplayManager.updateDisplay();
 		}
+		fbos.cleanUp();
 		waterShader.cleanUp();
 		guiRenderer.cleanUp();
 		renderer.cleanUp();
